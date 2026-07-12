@@ -17,7 +17,9 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 
-const chartData = [
+import { ILogSeverity } from "@/hooks/use-dashboard-data";
+
+const defaultChartData = [
   { code: "oks", issues: 190, fill: "var(--color-green)" },
   { code: "errors", issues: 133, fill: "var(--color-errors)" },
   { code: "warnings", issues: 43, fill: "var(--color-warnings)" },
@@ -46,17 +48,20 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function ChartPie() {
+export function ChartPie({ data }: { data: ILogSeverity[] }) {
+  const chartData = data && data.length > 0 ? data : defaultChartData;
+  const isSimulated = !data || data.length === 0;
+
   const totalIssues = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.issues, 0);
-  }, []);
+  }, [chartData]);
 
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Live log severity levels (simulated)</CardTitle>
+        <CardTitle>Log Severity Distribution {isSimulated && "(simulated)"}</CardTitle>
         <CardDescription>
-          Showing total logs for the last 1 week
+          Total log records compiled for the last 1 week
         </CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">

@@ -124,6 +124,7 @@ function ChartTooltipContent({
   hideLabel = false,
   hideName = false,
   hideIndicator = false,
+  useLabelAsName = false,
   label,
   labelFormatter,
   labelClassName,
@@ -139,6 +140,7 @@ function ChartTooltipContent({
     indicator?: "line" | "dot" | "dashed";
     nameKey?: string;
     labelKey?: string;
+    useLabelAsName?: boolean;
   } & Omit<
     RechartsPrimitive.DefaultTooltipContentProps<
       TooltipValueType,
@@ -150,30 +152,30 @@ function ChartTooltipContent({
 
   const tooltipLabel = React.useMemo(() => {
     if (hideLabel || !payload?.length) {
-      return null;
+      return null
     }
 
-    const [item] = payload;
-    const key = `${labelKey ?? item?.dataKey ?? item?.name ?? "value"}`;
-    const itemConfig = getPayloadConfigFromPayload(config, item, key);
+    const [item] = payload
+    const key = `${labelKey ?? item.dataKey ?? item.name ?? "value"}`
+    const itemConfig = getPayloadConfigFromPayload(config, item, key)
     const value =
       !labelKey && typeof label === "string"
-        ? (config[label]?.label ?? label)
-        : itemConfig?.label;
+        ? config[label]?.label ?? label
+        : itemConfig?.label
 
     if (labelFormatter) {
       return (
         <div className={cn("font-medium", labelClassName)}>
           {labelFormatter(value, payload)}
         </div>
-      );
+      )
     }
 
     if (!value) {
-      return null;
+      return null
     }
 
-    return <div className={cn("font-medium", labelClassName)}>{value}</div>;
+    return <div className={cn("font-medium", labelClassName)}>{value}</div>
   }, [
     label,
     labelFormatter,
@@ -182,7 +184,7 @@ function ChartTooltipContent({
     labelClassName,
     config,
     labelKey,
-  ]);
+  ])
 
   if (!active || !payload?.length) {
     return null;
@@ -204,14 +206,17 @@ function ChartTooltipContent({
           .map((item, index) => {
             const key = `${nameKey ?? item.name ?? item.dataKey ?? "value"}`;
             const itemConfig = getPayloadConfigFromPayload(config, item, key);
-            const indicatorColor = color ?? item.payload?.fill ?? item.color;
+            const indicatorColor =
+              color ??
+              (itemConfig as { color?: string })?.color ??
+              item.payload?.fill ??
+              item.color;
 
             return (
               <div
                 key={index}
                 className={cn(
-                  "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
-                  indicator === "dot" && "items-center",
+                  "flex w-full flex-wrap items-center gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                 )}
               >
                 {formatter && item?.value !== undefined && item.name ? (
@@ -244,16 +249,22 @@ function ChartTooltipContent({
                     )}
                     <div
                       className={cn(
-                        "flex flex-1 justify-between leading-none",
+                        "flex flex-1 justify-between leading-none gap-8",
                         nestLabel ? "items-end" : "items-center",
                       )}
                     >
-                      <div className="grid gap-1.5">
-                        {nestLabel ? tooltipLabel : null}
+                      {nestLabel ? (
+                        <div className="grid gap-1.5">
+                          {tooltipLabel}
+                          <span className="text-muted-foreground">
+                            {hideName ? "" : (useLabelAsName ? label : (itemConfig?.label ?? item.name))}
+                          </span>
+                        </div>
+                      ) : (
                         <span className="text-muted-foreground">
-                          {hideName ? "" : (itemConfig?.label ?? item.name)}
+                          {hideName ? "" : (useLabelAsName ? label : (itemConfig?.label ?? item.name))}
                         </span>
-                      </div>
+                      )}
                       {item.value != null && (
                         <span className="font-mono font-medium text-foreground tabular-nums">
                           {typeof item.value === "number"
