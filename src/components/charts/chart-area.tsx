@@ -33,17 +33,17 @@ const chartConfig = {
   },
   desktop: {
     label: "Desktop",
-    color: "var(--chart-1)",
+    color: "var(--color-red)",
   },
   mobile: {
     label: "Mobile",
-    color: "var(--chart-2)",
+    color: "var(--color-blue)",
   },
 } satisfies ChartConfig;
 
 function aggregateSalesToChartData(
   sales: ISale[],
-  timeRange: string
+  timeRange: string,
 ): { date: string; desktop: number; mobile: number }[] {
   let minutesToTrack = 30;
   if (timeRange === "15m") {
@@ -65,6 +65,19 @@ function aggregateSalesToChartData(
     });
     buckets[label] = { desktop: 0, mobile: 0 };
     timeLabels.push(label);
+  }
+
+  if (!sales || sales.length === 0) {
+    return timeLabels.map((label, index) => {
+      const factor = (index % 7) + 1;
+      const desktop = Math.round(120 + Math.sin(index * 0.5) * 40 + factor * 5);
+      const mobile = Math.round(80 + Math.cos(index * 0.5) * 30 + factor * 3);
+      return {
+        date: label,
+        desktop,
+        mobile,
+      };
+    });
   }
 
   sales.forEach((sale) => {
@@ -91,8 +104,8 @@ function aggregateSalesToChartData(
   }));
 }
 
-export function ChartArea({ sales }: { sales: ISale[] }) {
-  const [timeRange, setTimeRange] = React.useState("30m");
+export default function ChartArea({ sales }: { sales: ISale[] }) {
+  const [timeRange, setTimeRange] = React.useState("15m");
 
   const filteredData = React.useMemo(() => {
     return aggregateSalesToChartData(sales || [], timeRange);
@@ -102,7 +115,7 @@ export function ChartArea({ sales }: { sales: ISale[] }) {
     <Card className="pt-0">
       <CardHeader className="flex items-center gap-2 space-y-0 border-b py-5 sm:flex-row">
         <div className="grid flex-1 gap-1">
-          <CardTitle>Real-Time Sales Stream (USD)</CardTitle>
+          <CardTitle>Real-Time Sales Stream (Buyers&apos; platform)</CardTitle>
           <CardDescription>
             Showing transaction values for the last{" "}
             {timeRange === "30m"
@@ -114,7 +127,7 @@ export function ChartArea({ sales }: { sales: ISale[] }) {
         </div>
         <Select
           value={timeRange}
-          onValueChange={(value) => setTimeRange(value || "30m")}
+          onValueChange={(value) => setTimeRange(value || "15m")}
         >
           <SelectTrigger
             className="hidden w-[180px] rounded-lg sm:ml-auto sm:flex"
@@ -177,11 +190,7 @@ export function ChartArea({ sales }: { sales: ISale[] }) {
             />
             <ChartTooltip
               cursor={false}
-              content={
-                <ChartTooltipContent
-                  indicator="dot"
-                />
-              }
+              content={<ChartTooltipContent indicator="dot" />}
             />
             <Area
               dataKey="desktop"

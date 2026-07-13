@@ -6,6 +6,7 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { RadioIcon } from "lucide-react";
 import { useDashboard, DashboardProvider } from "@/hooks/use-dashboard-data";
+import WebSocketLoadingScreen from "@/components/ui/websocket-loading-screen";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -66,7 +67,6 @@ function DashboardHeader({ pathSegments }: { pathSegments: string[] }) {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-4">
-        {/* Compact live status indicator in the top bar - visible only on overview */}
         {isOverview && (
           <div
             className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold select-none transition-colors duration-300 ${
@@ -111,6 +111,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
         </SidebarInset>
       </SidebarProvider>
+      <WebSocketLoadingScreen />
     </DashboardProvider>
   );
 }

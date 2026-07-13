@@ -16,7 +16,9 @@ export function useLiveSales() {
   const [sales, setSales] = useState<ISale[]>([]);
 
   useEffect(() => {
-    const socket: Socket = io("http://localhost:3003");
+    const backendUrl =
+      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3003";
+    const socket: Socket = io(backendUrl);
 
     socket.on("connect", () => {
       console.info(`Connected to WebSocket server: ${socket.id}`);

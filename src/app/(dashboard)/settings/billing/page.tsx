@@ -1,4 +1,11 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CreditCardIcon } from "lucide-react";
 
@@ -15,11 +22,20 @@ export default function BillingSettingsPage() {
         <Card>
           <CardHeader>
             <CardTitle>Current Plan</CardTitle>
-            <CardDescription>You are currently on the Enterprise plan.</CardDescription>
+            <CardDescription>
+              You are currently on the Enterprise plan.
+            </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-2">
-            <div className="text-3xl font-bold">$249.00<span className="text-sm font-normal text-muted-foreground">/month</span></div>
-            <p className="text-xs text-muted-foreground mt-2">Next payment scheduled for August 1, 2026.</p>
+            <div className="text-3xl font-bold">
+              $249.00
+              <span className="text-sm font-normal text-muted-foreground">
+                /month
+              </span>
+            </div>
+            <p className="text-xs text-muted-foreground mt-2">
+              Next payment scheduled for August 1, 2026.
+            </p>
           </CardContent>
           <CardFooter className="flex justify-end gap-2 border-t pt-4">
             <Button variant="outline">Change Plan</Button>
@@ -37,7 +53,9 @@ export default function BillingSettingsPage() {
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm">Visa ending in 4242</span>
-              <span className="text-xs text-muted-foreground mt-0.5">Expires 12/2029</span>
+              <span className="text-xs text-muted-foreground mt-0.5">
+                Expires 12/2029
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end gap-2 border-t pt-4">
@@ -49,33 +67,54 @@ export default function BillingSettingsPage() {
       <Card>
         <CardHeader>
           <CardTitle>Invoice History</CardTitle>
-          <CardDescription>Download past receipts and invoices.</CardDescription>
+          <CardDescription>
+            Download past receipts and invoices.
+          </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto rounded-md border border-border">
             <table className="w-full text-left border-collapse text-sm">
               <thead>
                 <tr className="border-b bg-muted/30">
-                  <th className="p-3 font-medium text-muted-foreground">Invoice ID</th>
-                  <th className="p-3 font-medium text-muted-foreground">Date</th>
-                  <th className="p-3 font-medium text-muted-foreground">Amount</th>
-                  <th className="p-3 font-medium text-muted-foreground">Status</th>
-                  <th className="p-3 text-right font-medium text-muted-foreground">Action</th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    Invoice ID
+                  </th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    Date
+                  </th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    Amount
+                  </th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    Status
+                  </th>
+                  <th className="p-3 text-right font-medium text-muted-foreground">
+                    Action
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {invoices.map((invoice) => (
-                  <tr key={invoice.id} className="hover:bg-muted/10 transition-colors">
+                  <tr
+                    key={invoice.id}
+                    className="hover:bg-muted/10 transition-colors"
+                  >
                     <td className="p-3 font-semibold text-xs">{invoice.id}</td>
-                    <td className="p-3 text-muted-foreground text-xs">{invoice.date}</td>
-                    <td className="p-3 text-sm font-medium">{invoice.amount}</td>
+                    <td className="p-3 text-muted-foreground text-xs">
+                      {invoice.date}
+                    </td>
+                    <td className="p-3 text-sm font-medium">
+                      {invoice.amount}
+                    </td>
                     <td className="p-3">
                       <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-green/10 text-green">
                         {invoice.status}
                       </span>
                     </td>
                     <td className="p-3 text-right">
-                      <Button variant="ghost" size="sm">Download PDF</Button>
+                      <Button variant="ghost" size="sm">
+                        Download PDF
+                      </Button>
                     </td>
                   </tr>
                 ))}

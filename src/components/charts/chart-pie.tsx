@@ -50,7 +50,6 @@ const chartConfig = {
 
 export function ChartPie({ data }: { data: ILogSeverity[] }) {
   const chartData = data && data.length > 0 ? data : defaultChartData;
-  const isSimulated = !data || data.length === 0;
 
   const totalIssues = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.issues, 0);
@@ -59,7 +58,7 @@ export function ChartPie({ data }: { data: ILogSeverity[] }) {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Log Severity Distribution {isSimulated && "(simulated)"}</CardTitle>
+        <CardTitle>Log Severity Distribution</CardTitle>
         <CardDescription>
           Total log records compiled for the last 1 week
         </CardDescription>

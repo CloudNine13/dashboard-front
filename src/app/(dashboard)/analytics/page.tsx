@@ -1,5 +1,16 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ActivityIcon, UsersIcon, EyeIcon, MousePointerClickIcon } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ActivityIcon,
+  UsersIcon,
+  EyeIcon,
+  MousePointerClickIcon,
+} from "lucide-react";
 
 export default function AnalyticsPage() {
   const metrics = [
@@ -39,13 +50,17 @@ export default function AnalyticsPage() {
         {metrics.map((metric) => (
           <Card key={metric.title}>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
+              <CardTitle className="text-sm font-medium">
+                {metric.title}
+              </CardTitle>
               {metric.icon}
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold">{metric.value}</div>
               <p className="text-xs text-muted-foreground mt-1">
-                <span className="text-green font-semibold mr-1">{metric.change}</span>
+                <span className="text-green font-semibold mr-1">
+                  {metric.change}
+                </span>
                 {metric.description}
               </p>
             </CardContent>
@@ -62,7 +77,9 @@ export default function AnalyticsPage() {
         <CardContent className="h-[250px] flex items-center justify-center border border-dashed rounded-lg bg-muted/30">
           <div className="text-center">
             <ActivityIcon className="mx-auto h-8 w-8 text-muted-foreground animate-pulse mb-2" />
-            <p className="text-sm font-medium text-muted-foreground">Gathering latest analytics data...</p>
+            <p className="text-sm font-medium text-muted-foreground">
+              Gathering latest analytics data...
+            </p>
           </div>
         </CardContent>
       </Card>

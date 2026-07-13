@@ -1,12 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  basePath: "/dashboard",
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || "/dashboard",
+  allowedDevOrigins:
+    process.env.NEXT_PUBLIC_ALLOWED_DEV_ORIGINS?.split(",") || [],
   async rewrites() {
+    const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL || "";
     return [
       {
         source: "/socket.io/:path*",
-        destination: "http://localhost:3003/socket.io/:path*",
+        destination: `${backendUrl}/socket.io/:path*`,
       },
     ];
   },

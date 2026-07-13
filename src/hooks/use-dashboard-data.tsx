@@ -1,4 +1,5 @@
 "use client";
+/* eslint-disable react-hooks/set-state-in-effect */
 
 import * as React from "react";
 import { useEffect, useState } from "react";
@@ -14,13 +15,13 @@ export interface ISale {
 }
 
 export interface ICategorySale {
-  browser: string;
-  visitors: number;
+  category: string;
+  buyers: number;
   fill: string;
 }
 
 export interface ITelemetry {
-  month: string;
+  date: string;
   desktop: number;
   mobile: number;
 }
@@ -37,21 +38,44 @@ export function useDashboardData(active: boolean) {
   const [telemetry, setTelemetry] = useState<ITelemetry[]>([]);
   const [severity, setSeverity] = useState<ILogSeverity[]>([]);
   const [isConnected, setIsConnected] = useState(!active);
+  const [isConnecting, setIsConnecting] = useState(active);
+  const [error, setError] = useState<string | null>(null);
+  const [reconnectAttempt, setReconnectAttempt] = useState(0);
+  const [connectionSeq, setConnectionSeq] = useState(0);
 
   useEffect(() => {
-    if (!active) return;
+    if (!active) {
+      setIsConnected(true);
+      setIsConnecting(false);
+      setError(null);
+      return;
+    }
 
-    const host =
-      typeof window !== "undefined" ? window.location.hostname : "localhost";
-    const socket: Socket = io(`http://${host}:3003`);
+    setIsConnected(false);
+    setIsConnecting(true);
+    setError(null);
+    setConnectionSeq((prev) => prev + 1);
+
+    const backendUrl =
+      process.env.NEXT_PUBLIC_BACKEND_URL || "http://localhost:3003";
+    const socket: Socket = io(backendUrl);
 
     socket.on("connect", () => {
       setIsConnected(true);
+      setIsConnecting(false);
+      setError(null);
       console.info(`Connected to Backend Socket Server: ${socket.id}`);
+    });
+
+    socket.on("connect_error", (err) => {
+      console.error("Socket.io connection error:", err);
+      setError("Failed to connect to the backend socket server.");
+      setIsConnecting(false);
     });
 
     socket.on("disconnect", () => {
       setIsConnected(false);
+      setIsConnecting(false);
     });
 
     socket.on("sales-history", (history: ISale[]) => {
@@ -81,9 +105,26 @@ export function useDashboardData(active: boolean) {
     return () => {
       socket.disconnect();
     };
-  }, [active]);
+  }, [active, reconnectAttempt]);
 
-  return { sales, categories, telemetry, severity, isConnected };
+  const reconnect = React.useCallback(() => {
+    setIsConnecting(true);
+    setIsConnected(false);
+    setError(null);
+    setReconnectAttempt((prev) => prev + 1);
+  }, []);
+
+  return {
+    sales,
+    categories,
+    telemetry,
+    severity,
+    isConnected,
+    isConnecting,
+    error,
+    reconnect,
+    connectionSeq,
+  };
 }
 
 const DashboardContext = React.createContext<ReturnType<

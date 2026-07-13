@@ -1,6 +1,6 @@
 "use client";
 
-import { ComponentProps } from "react";
+import * as React from "react";
 
 import { NavMain } from "@/components/nav-main";
 import { NavUser } from "@/components/nav-user";
@@ -12,6 +12,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import useSidebarAutoClose from "@/hooks/use-sidebar-auto-close";
 import {
   GalleryVerticalEndIcon,
   SquareChartGanttIcon,
@@ -100,7 +101,9 @@ const data = {
   ],
 };
 
-export function AppSidebar({ ...props }: ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  useSidebarAutoClose();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

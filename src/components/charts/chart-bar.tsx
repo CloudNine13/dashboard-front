@@ -1,6 +1,6 @@
 "use client";
 
-import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, XAxis, YAxis } from "recharts";
 
 import {
   Card,
@@ -19,32 +19,16 @@ import {
 import { ICategorySale } from "@/hooks/use-dashboard-data";
 
 const defaultChartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-red)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-blue)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-green)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-yellow)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+  { category: "Electronics", buyers: 100, fill: "var(--color-red)" },
+  { category: "Clothing", buyers: 103, fill: "var(--color-blue)" },
+  { category: "Home", buyers: 97, fill: "var(--color-green)" },
+  { category: "Books", buyers: 105, fill: "var(--color-yellow)" },
+  { category: "Automotive", buyers: 99, fill: "var(--color-orange)" },
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  chrome: {
-    label: "Chrome",
-    color: "var(--color-red)",
-  },
-  safari: {
-    label: "Safari",
-    color: "var(--color-blue)",
-  },
-  firefox: {
-    label: "Firefox",
-    color: "var(--color-green)",
-  },
-  edge: {
-    label: "Edge",
-    color: "var(--color-yellow)",
+  buyers: {
+    label: "Buyers",
   },
   Electronics: {
     label: "Electronics",
@@ -64,7 +48,7 @@ const chartConfig = {
   },
   Automotive: {
     label: "Automotive",
-    color: "var(--color-purple)",
+    color: "var(--color-orange)",
   },
   other: {
     label: "Other",
@@ -73,15 +57,22 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function ChartBar({ data }: { data: ICategorySale[] }) {
-  const chartData = data && data.length > 0 ? data : defaultChartData;
-  const isSimulated = !data || data.length === 0;
+  const chartData =
+    data && data.length > 0
+      ? data.map((entry) => {
+          const key = entry.category as keyof typeof chartConfig;
+          const configColor = (chartConfig[key] as { color?: string })?.color;
+          return {
+            ...entry,
+            fill: configColor || entry.fill || "var(--color-gray)",
+          };
+        })
+      : defaultChartData;
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>
-          Sales by Category {isSimulated && "(simulated)"}
-        </CardTitle>
+        <CardTitle>Sales by Category</CardTitle>
         <CardDescription>Rolling 30-minute transaction totals</CardDescription>
       </CardHeader>
       <CardContent>
@@ -95,33 +86,28 @@ export function ChartBar({ data }: { data: ICategorySale[] }) {
             }}
           >
             <YAxis
-              dataKey="browser"
+              dataKey="category"
               type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
               width={85}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label as string || value
+                (chartConfig[value as keyof typeof chartConfig]
+                  ?.label as string) || value
               }
             />
-            <XAxis dataKey="visitors" type="number" hide />
+            <XAxis dataKey="buyers" type="number" hide />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel nameKey="browser" />}
+              content={<ChartTooltipContent hideLabel nameKey="category" />}
             />
-            <Bar dataKey="visitors" radius={5} isAnimationActive={false}>
-              {chartData.map((entry, index) => {
-                const key = entry.browser as keyof typeof chartConfig;
-                const configColor = (chartConfig[key] as { color?: string })?.color;
-                return (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={configColor || entry.fill || "var(--color-gray)"}
-                  />
-                );
-              })}
-            </Bar>
+            <Bar
+              dataKey="buyers"
+              radius={5}
+              isAnimationActive={false}
+              fill="var(--color-blue)"
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

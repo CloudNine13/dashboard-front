@@ -45,6 +45,7 @@
   --color-yellow: var(--yellow);
   --color-cyan: var(--cyan);
   --color-purple: var(--purple);
+  --color-orange: var(--orange);
   --color-gray: var(--gray);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);

@@ -1,4 +1,10 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 
@@ -30,7 +36,9 @@ export default function TeamSettingsPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
             <CardTitle>Team Settings</CardTitle>
-            <CardDescription>Manage your team member roles and permissions.</CardDescription>
+            <CardDescription>
+              Manage your team member roles and permissions.
+            </CardDescription>
           </div>
           <Button size="sm">Invite Member</Button>
         </CardHeader>
@@ -39,23 +47,38 @@ export default function TeamSettingsPage() {
             <table className="w-full text-left border-collapse text-sm">
               <thead>
                 <tr className="border-b bg-muted/30">
-                  <th className="p-3 font-medium text-muted-foreground">User</th>
-                  <th className="p-3 font-medium text-muted-foreground">Role</th>
-                  <th className="p-3 font-medium text-muted-foreground">Status</th>
-                  <th className="p-3 text-right font-medium text-muted-foreground">Actions</th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    User
+                  </th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    Role
+                  </th>
+                  <th className="p-3 font-medium text-muted-foreground">
+                    Status
+                  </th>
+                  <th className="p-3 text-right font-medium text-muted-foreground">
+                    Actions
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {members.map((member) => (
-                  <tr key={member.email} className="hover:bg-muted/10 transition-colors">
+                  <tr
+                    key={member.email}
+                    className="hover:bg-muted/10 transition-colors"
+                  >
                     <td className="p-3 flex items-center gap-3">
                       <Avatar className="h-8 w-8">
                         <AvatarImage src={member.avatar} alt={member.name} />
                         <AvatarFallback>{member.name.charAt(0)}</AvatarFallback>
                       </Avatar>
                       <div className="flex flex-col">
-                        <span className="font-medium text-sm leading-none">{member.name}</span>
-                        <span className="text-xs text-muted-foreground mt-0.5">{member.email}</span>
+                        <span className="font-medium text-sm leading-none">
+                          {member.name}
+                        </span>
+                        <span className="text-xs text-muted-foreground mt-0.5">
+                          {member.email}
+                        </span>
                       </div>
                     </td>
                     <td className="p-3 font-medium text-xs">{member.role}</td>
@@ -65,7 +88,9 @@ export default function TeamSettingsPage() {
                       </span>
                     </td>
                     <td className="p-3 text-right">
-                      <Button variant="ghost" size="sm">Manage</Button>
+                      <Button variant="ghost" size="sm">
+                        Manage
+                      </Button>
                     </td>
                   </tr>
                 ))}
