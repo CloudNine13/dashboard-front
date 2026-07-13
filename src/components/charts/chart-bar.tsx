@@ -16,46 +16,64 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 
-const chartData = [
-  { browser: "chrome", visitors: 275, fill: "var(--color-red)" },
-  { browser: "safari", visitors: 200, fill: "var(--color-blue)" },
-  { browser: "firefox", visitors: 187, fill: "var(--color-green)" },
-  { browser: "edge", visitors: 173, fill: "var(--color-yellow)" },
-  { browser: "other", visitors: 90, fill: "var(--color-other)" },
+import { ICategorySale } from "@/hooks/use-dashboard-data";
+
+const defaultChartData = [
+  { category: "Electronics", buyers: 100, fill: "var(--color-red)" },
+  { category: "Clothing", buyers: 103, fill: "var(--color-blue)" },
+  { category: "Home", buyers: 97, fill: "var(--color-green)" },
+  { category: "Books", buyers: 105, fill: "var(--color-yellow)" },
+  { category: "Automotive", buyers: 99, fill: "var(--color-orange)" },
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
+  buyers: {
+    label: "Buyers",
   },
-  chrome: {
-    label: "Chrome",
-    color: "var(--chart-1)",
+  Electronics: {
+    label: "Electronics",
+    color: "var(--color-red)",
   },
-  safari: {
-    label: "Safari",
-    color: "var(--chart-2)",
+  Clothing: {
+    label: "Clothing",
+    color: "var(--color-blue)",
   },
-  firefox: {
-    label: "Firefox",
-    color: "var(--chart-3)",
+  Home: {
+    label: "Home",
+    color: "var(--color-green)",
   },
-  edge: {
-    label: "Edge",
-    color: "var(--chart-4)",
+  Books: {
+    label: "Books",
+    color: "var(--color-yellow)",
+  },
+  Automotive: {
+    label: "Automotive",
+    color: "var(--color-orange)",
   },
   other: {
     label: "Other",
-    color: "var(--chart-5)",
+    color: "var(--color-gray)",
   },
 } satisfies ChartConfig;
 
-export function ChartBar() {
+export function ChartBar({ data }: { data: ICategorySale[] }) {
+  const chartData =
+    data && data.length > 0
+      ? data.map((entry) => {
+          const key = entry.category as keyof typeof chartConfig;
+          const configColor = (chartConfig[key] as { color?: string })?.color;
+          return {
+            ...entry,
+            fill: configColor || entry.fill || "var(--color-gray)",
+          };
+        })
+      : defaultChartData;
+
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Sales by product category (simulated)</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Sales by Category</CardTitle>
+        <CardDescription>Rolling 30-minute transaction totals</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -68,21 +86,28 @@ export function ChartBar() {
             }}
           >
             <YAxis
-              dataKey="browser"
+              dataKey="category"
               type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
+              width={85}
               tickFormatter={(value) =>
-                chartConfig[value as keyof typeof chartConfig]?.label
+                (chartConfig[value as keyof typeof chartConfig]
+                  ?.label as string) || value
               }
             />
-            <XAxis dataKey="visitors" type="number" hide />
+            <XAxis dataKey="buyers" type="number" hide />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent hideLabel />}
+              content={<ChartTooltipContent hideLabel nameKey="category" />}
             />
-            <Bar dataKey="visitors" radius={5} isAnimationActive={false} />
+            <Bar
+              dataKey="buyers"
+              radius={5}
+              isAnimationActive={false}
+              fill="var(--color-blue)"
+            />
           </BarChart>
         </ChartContainer>
       </CardContent>

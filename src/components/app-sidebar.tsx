@@ -12,6 +12,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import useSidebarAutoClose from "@/hooks/use-sidebar-auto-close";
 import {
   GalleryVerticalEndIcon,
   SquareChartGanttIcon,
@@ -101,6 +102,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  useSidebarAutoClose();
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

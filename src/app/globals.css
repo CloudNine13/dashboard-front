@@ -45,6 +45,7 @@
   --color-yellow: var(--yellow);
   --color-cyan: var(--cyan);
   --color-purple: var(--purple);
+  --color-orange: var(--orange);
   --color-gray: var(--gray);
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
@@ -130,12 +131,13 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
-  --red: oklch(0.628 0.2577 29.23);
-  --blue: oklch(0.452014 0.313214 264.052);
-  --green: oklch(0.86644 0.294827 142.4953);
-  --yellow: oklch(0.968 0.211 109.77);
-  --cyan: oklch(0.905399 0.15455 194.7689);
-  --purple: oklch(0.7017 0.3225 328.36);
+  --red: oklch(0.5086 0.182 26.64);
+  --blue: oklch(0.564546 0.171257 252.4634);
+  --green: oklch(0.4906 0.1425 147.65);
+  --yellow: oklch(0.6641 0.1362 84.47);
+  --cyan: oklch(0.795 0.1349 148.73);
+  --purple: oklch(0.5087 0.19 332.93);
+  --orange: oklch(0.637043 0.1991 40.2061);
   --gray: oklch(0.5999 0 0);
 }
 
