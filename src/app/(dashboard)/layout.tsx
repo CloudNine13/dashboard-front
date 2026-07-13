@@ -67,7 +67,6 @@ function DashboardHeader({ pathSegments }: { pathSegments: string[] }) {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-4">
-        {/* Compact live status indicator in the top bar - visible only on overview */}
         {isOverview && (
           <div
             className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold select-none transition-colors duration-300 ${
