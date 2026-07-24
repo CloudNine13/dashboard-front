@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 
-export default function useWebSocketLoader(
+export default function useConnectionLoader(
   isConnecting: boolean,
   isConnected: boolean,
   error: boolean,

@@ -43,5 +43,6 @@ next-env.d.ts
 .agents
 /docs/
 /graphify-out*
+/opencode*
 skills-lock.json
 docs

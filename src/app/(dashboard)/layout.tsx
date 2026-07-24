@@ -6,7 +6,9 @@ import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { RadioIcon } from "lucide-react";
 import { useDashboard, DashboardProvider } from "@/hooks/use-dashboard-data";
+import { DroneProvider, useDroneDataContext } from "@/hooks/use-drone-data";
 import WebSocketLoadingScreen from "@/components/ui/websocket-loading-screen";
+import MqttLoadingScreen from "@/components/ui/mqtt-loading-screen";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -23,9 +25,13 @@ import {
 } from "@/components/ui/sidebar";
 
 function DashboardHeader({ pathSegments }: { pathSegments: string[] }) {
-  const { isConnected } = useDashboard();
+  const dashboardCtx = useDashboard();
+  const droneCtx = useDroneDataContext();
   const pathname = usePathname();
   const isOverview = pathname === "/overview";
+  const isDronesPage = pathname === "/drones";
+
+  const { isConnected } = isDronesPage ? droneCtx : dashboardCtx;
 
   return (
     <header className="flex h-16 shrink-0 items-center justify-between gap-2 border-b px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
@@ -67,7 +73,7 @@ function DashboardHeader({ pathSegments }: { pathSegments: string[] }) {
         </Breadcrumb>
       </div>
       <div className="flex items-center gap-4">
-        {isOverview && (
+        {(isOverview || isDronesPage) && (
           <div
             className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold select-none transition-colors duration-300 ${
               isConnected
@@ -101,17 +107,21 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const pathSegments = pathname.split("/").filter(Boolean);
   const isOverview = pathname === "/overview";
+  const isDronesPage = pathname === "/drones";
 
   return (
     <DashboardProvider active={isOverview}>
-      <SidebarProvider>
-        <AppSidebar />
-        <SidebarInset>
-          <DashboardHeader pathSegments={pathSegments} />
-          <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
-        </SidebarInset>
-      </SidebarProvider>
-      <WebSocketLoadingScreen />
+      <DroneProvider active={isDronesPage}>
+        <SidebarProvider>
+          <AppSidebar />
+          <SidebarInset>
+            <DashboardHeader pathSegments={pathSegments} />
+            <div className="flex flex-1 flex-col gap-4 p-4">{children}</div>
+          </SidebarInset>
+        </SidebarProvider>
+        <WebSocketLoadingScreen />
+        <MqttLoadingScreen />
+      </DroneProvider>
     </DashboardProvider>
   );
 }
