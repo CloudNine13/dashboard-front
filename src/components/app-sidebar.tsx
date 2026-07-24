@@ -12,7 +12,6 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import useSidebarAutoClose from "@/hooks/use-sidebar-auto-close";
 import {
   GalleryVerticalEndIcon,
   SquareChartGanttIcon,
@@ -21,9 +20,9 @@ import {
   ChartNetworkIcon,
   ScrollTextIcon,
   Settings2Icon,
+  DroneIcon,
 } from "lucide-react";
 
-// This is sample data.
 const data = {
   user: {
     name: "Igor Dzichkovskii",
@@ -58,7 +57,7 @@ const data = {
   ],
   dashboard: [
     {
-      title: "Overview",
+      title: "Overview (WebSockets)",
       url: "/overview",
       icon: <SquareChartGanttIcon />,
       isActive: true,
@@ -67,6 +66,11 @@ const data = {
       title: "Analytics",
       url: "/analytics",
       icon: <ChartNetworkIcon />,
+    },
+    {
+      title: "Drones (MQTT)",
+      url: "/drones",
+      icon: <DroneIcon />,
     },
   ],
   settings: [
@@ -102,8 +106,6 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  useSidebarAutoClose();
-
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
